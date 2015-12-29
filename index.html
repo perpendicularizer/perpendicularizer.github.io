@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <form onsubmit="return updateFields()">
+    <form onsubmit="updateFields(); return false" onchange="updateFields()">
         <fieldset>
             <legend><b>Text Perpendicularizer</b></legend>
             <p>
@@ -84,35 +84,34 @@ function perpendicularize(text) {
 }
 
 function updateFields() {
-    var text = $('[name="input"]').value;
-    $('#markdown').value = perpendicularize(text);;
-
-    // don't actually submit the form
-    return false;
+    $('#markdown').placeholder = perpendicularize($('[name="input"]').placeholder);
+    $('#markdown').value = perpendicularize($('[name="input"]').value);
 }
 
-// set initial values based on url params
-var query = {};
-var params = document.location.search.substr(1).split('&');
-for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
-    if (param.length > 1) {
-        query[decodeURIComponent(param[0])] =
-            decodeURIComponent(param[1].replace("+"," "));
+function setInitialValues() {
+    var query = {};
+    var params = document.location.search.substr(1).split('&');
+    for (var i = 0; i < params.length; i++) {
+        var param = params[i].split('=');
+        if (param.length > 1) {
+            query[decodeURIComponent(param[0])] =
+                decodeURIComponent(param[1].replace('+',' '));
+        }
+    }
+    var $fields = $$('[name]');
+    for (var i = 0; i < $fields.length; i++) {
+        var $field = $fields[i];
+        var value = query[$field.name];
+        if ($field.type === 'checkbox' && $field.name in query) {
+            $field.checked = !!value;
+        }
+        else if (value) {
+            $field.value = value;
+        }
     }
 }
-var $fields = $$("[name]");
-for (var i = 0; i < $fields.length; i++) {
-    var $field = $fields[i];
-    var value = query[$field.name];
-    if ($field.type === 'checkbox' && $field.name in query) {
-        $field.checked = !!value;
-    }
-    else if (value) {
-        $field.value = value;
-    }
-}
-$("#markdown").placeholder = perpendicularize($('[name="input"]').placeholder);
+
+setInitialValues();
 updateFields();
 </script>
 
