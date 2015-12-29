@@ -17,17 +17,17 @@
         <fieldset>
             <legend><b>Text Perpendicularizer</b></legend>
             <p>
-                <label><b>Input:</b> <br><input type="text" name="input" autofocus placeholder="Hello" /></label>
+                <label><b>Input:</b> <br><input type="text" name="input" autofocus placeholder="Hello"/></label>
             </p>
             <p>
                 <b>Options:</b><br>
-                <label><input type="checkbox" name="uppercase"/> UPPERCASE</label>
+                <label><input type="checkbox" name="uppercase"/> U P P E R C A S E</label>
                 <br>
                 <label><input type="checkbox" name="fullwidth"/> Ｆｕｌｌ－Ｗｉｄｔｈ</label>
                 <br>
                 <label><input type="checkbox" name="triangle"/> Triangle</label>
             </p>
-            <button type="submit">Go</button>
+            <button type="submit">Make it so</button>
             <p>
                 <label><b>Markdown:</b><br>
                     <textarea id="markdown" placeholder="Ｈｅｌｌｏ  
@@ -102,7 +102,7 @@ var $fields = $$("[name]");
 for (var i = 0; i < $fields.length; i++) {
     var $field = $fields[i];
     var value = query[$field.name];
-    if ($field.type === 'checkbox') {
+    if ($field.type === 'checkbox' && $field.name in query) {
         $field.checked = !!value;
     }
     else if (value) {
