@@ -8,12 +8,13 @@
         fieldset { display: inline-block; text-align: left; }
         legend { text-align: center; }
         textarea { width: 30em; height: 20em; }
-        input[type="text"] {width: 100%;}
+        input[type="text"] { box-sizing: border-box; width: 100%; }
+        footer { position: fixed; bottom: 1em; right: 1em; }
     </style>
 </head>
 <body>
 
-    <form onsubmit="return perpendicularize()">
+    <form onsubmit="return updateFields()">
         <fieldset>
             <legend><b>Text Perpendicularizer</b></legend>
             <p>
@@ -30,15 +31,16 @@
             <button type="submit">Make it so</button>
             <p>
                 <label><b>Markdown:</b><br>
-                    <textarea id="markdown" placeholder="Ｈｅｌｌｏ  
-ｅ  
-ｌ  
-ｌ  
-ｏ"></textarea>
+                    <textarea id="markdown"></textarea>
                 </label>
             </p>
         </fieldset>
     </form>
+
+    <footer>
+        <a href="https://github.com/jjclark1982/perpendicularizer/issues">
+        Suggestions</a>
+    </footer>
 
 <script>
 $ = document.querySelector.bind(document);
@@ -51,10 +53,7 @@ function toFullWidth(text) {
     );
 }
 
-function perpendicularize() {
-    var $input = $('[name="input"]');
-    var text = $input.value;
-
+function perpendicularize(text) {
     if ($('[name="uppercase"]').checked) {
         text = text.toUpperCase();
     }
@@ -81,8 +80,12 @@ function perpendicularize() {
         }
     }
 
-    var output = lines.join("  \n");
-    $('#markdown').value = output;
+    return lines.join("  \n");
+}
+
+function updateFields() {
+    var text = $('[name="input"]').value;
+    $('#markdown').value = perpendicularize(text);;
 
     // don't actually submit the form
     return false;
@@ -109,7 +112,8 @@ for (var i = 0; i < $fields.length; i++) {
         $field.value = value;
     }
 }
-perpendicularize();
+$("#markdown").placeholder = perpendicularize($('[name="input"]').placeholder);
+updateFields();
 </script>
 
 </body>
