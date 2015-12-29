@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Text Perpendicularizer</title>
+    <style>
+        form {
+            text-align: center;
+        }
+        fieldset {
+            display: inline-block;
+            text-align: left;
+        }
+        legend {
+            text-align: center;
+        }
+        textarea {
+            width: 30em;
+            height: 20em;
+        }
+    </style>
+</head>
+<body>
+
+    <form onsubmit="return perpendicularize()">
+        <fieldset>
+            <legend><b>Text Perpendicularizer</b></legend>
+            <p>
+                <label><b>Input:</b> <br><input id="input" autofocus placeholder="Hello" /></label>
+            </p>
+            <p>
+                <b>Options:</b><br>
+                <label><input type="checkbox" id="uppercase"/> UPPERCASE</label>
+                <br>
+                <label><input type="checkbox" id="fullwidth"/> Ｆｕｌｌ－Ｗｉｄｔｈ</label>
+                <br>
+                <label><input type="checkbox" id="triangle"/> Triangle</label>
+            </p>
+            <button type="submit">Go</button>
+            <p>
+                <label><b>Markdown:</b><br>
+                    <textarea id="markdown">
+Ｈｅｌｌｏ  
+ｅ  
+ｌ  
+ｌ  
+ｏ
+                    </textarea>
+                </label>
+            </p>
+        </fieldset>
+    </form>
+
+<script>
+$ = document.getElementById.bind(document);
+
+function toFullWidth(text) {
+    return text.replace(
+        /[\u01-\ufe]/g,
+        function(ch) { return String.fromCharCode(ch.charCodeAt(0) + 0xfee0); }
+    );
+}
+
+function perpendicularize() {
+    var $input = $("input");
+
+    var text = $input.value;
+
+    if ($("uppercase").checked) {
+        text = text.toUpperCase();
+    }
+    if ($("fullwidth").checked) {
+        text = toFullWidth(text);
+    }
+
+    var lines;
+    if ($("triangle").checked) {
+        lines = []
+        for (var i = 0; i < text.length; i++) {
+            lines[i] = text.substr(i);
+        }
+    }
+    else {
+        var lines = text.split('');
+        lines[0] = text;
+    }
+
+    if (!$("fullwidth").checked) {
+        for (var i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replace(/(.)/g, '$1 ');
+        }
+    }
+    var output = lines.join("  \n");
+
+    $("markdown").value = output;
+    return false; // don't actually submit the form
+}
+</script>
+
+</body>
+</html>
