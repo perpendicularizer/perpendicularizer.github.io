@@ -56,12 +56,14 @@ function perpendicularize(text) {
     if ($('[name="fullwidth"]').checked) {
         text = toFullWidth(text);
     }
+    // always use full-width space
+    text = text.replace(/ +/g, String.fromCharCode(0x3000));
 
     var lines;
     if ($('[name="triangle"]').checked) {
         lines = []
         for (var i = 0; i < text.length; i++) {
-            lines[i] = text.substr(i).replace(/^(\s+)/, '　');
+            lines[i] = text.substr(i);
         }
     }
     else {
@@ -72,7 +74,7 @@ function perpendicularize(text) {
     if (!$('[name="fullwidth"]').checked) {
         // insert space between half-width characters on a line
         for (var i = 0; i < lines.length; i++) {
-            lines[i] = lines[i].replace(/(.)/g, '$1 ');
+            lines[i] = lines[i].replace(/(\w)/g, '$1 ');
         }
     }
 
