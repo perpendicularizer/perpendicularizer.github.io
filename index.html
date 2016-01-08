@@ -61,7 +61,7 @@ function perpendicularize(text) {
     if ($('[name="triangle"]').checked) {
         lines = []
         for (var i = 0; i < text.length; i++) {
-            lines[i] = text.substr(i);
+            lines[i] = text.substr(i).replace(/^(\s+)/, '　');
         }
     }
     else {
