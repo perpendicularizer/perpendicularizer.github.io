@@ -27,7 +27,15 @@
                 <br>
                 <label><input type="checkbox" name="fullwidth"/> Ｆｕｌｌ－Ｗｉｄｔｈ</label>
                 <br>
-                <label><input type="checkbox" name="triangle"/> Triangle</label>
+            </p>
+            <p>
+                <b>Geometry:</b><br>
+                <label><input type="radio" name="geometry" value="horizontal"> Horizontal</label><br>
+                <label><input type="radio" name="geometry" value="vertical"> Vertical</label><br>
+                <label><input type="radio" name="geometry" value="topleft" checked> Top Left</label><br>
+                <label><input type="radio" name="geometry" value="bottomleft"> Bottom Left</label><br>
+                <label><input type="radio" name="geometry" value="triangle"> Triangle</label><br>
+                <label><input type="radio" name="geometry" value="cube" disabled> Cube</label>
             </p>
             <button type="submit">Make it so</button>
             <p>
@@ -59,16 +67,29 @@ function perpendicularize(text) {
     // always use full-width space
     text = text.replace(/ +/g, String.fromCharCode(0x3000));
 
-    var lines;
-    if ($('[name="triangle"]').checked) {
-        lines = []
-        for (var i = 0; i < text.length; i++) {
-            lines[i] = text.substr(i);
-        }
-    }
-    else {
-        var lines = text.split('');
-        lines[0] = text;
+    var geometry = $('[name="geometry"]:checked').value;
+
+    var lines = [];
+    switch (geometry) {
+        case 'horizontal':
+            lines[0] = text;
+            break;
+        case 'vertical':
+            lines = text.split('');
+            break;
+        case 'topleft':
+            var lines = text.split('');
+            lines[0] = text;
+            break;
+        case 'bottomleft':
+            var lines = text.split('').reverse();
+            lines[lines.length-1] = text;
+            break;
+        case 'triangle': 
+            for (var i = 0; i < text.length; i++) {
+                lines[i] = text.substr(i);
+            }
+            break;
     }
 
     if (!$('[name="fullwidth"]').checked) {
@@ -102,6 +123,9 @@ function setInitialValues() {
         var value = query[$field.name];
         if ($field.type === 'checkbox' && $field.name in query) {
             $field.checked = !!value;
+        }
+        else if ($field.type === 'radio' && $field.value === value) {
+            $field.checked = true;
         }
         else if (value) {
             $field.value = value;
