@@ -34,6 +34,7 @@
                 <label><input type="radio" name="geometry" value="vertical"> Vertical</label><br>
                 <label><input type="radio" name="geometry" value="topleft" checked> Top Left</label><br>
                 <label><input type="radio" name="geometry" value="bottomleft"> Bottom Left</label><br>
+                <label><input type="radio" name="geometry" value="tripod"> Tripod</label><br>
                 <label><input type="radio" name="geometry" value="triangle"> Triangle</label><br>
                 <label><input type="radio" name="geometry" value="cube" disabled> Cube</label>
             </p>
@@ -84,6 +85,16 @@ function perpendicularize(text) {
         case 'bottomleft':
             var lines = text.split('').reverse();
             lines[lines.length-1] = text;
+            break;
+        case 'tripod': 
+            var lines = text.split('');
+            lines[0] = text;
+            for (var i = 1; i < text.length; i++) {
+                for (var j = 1; j<i; j++) {
+                    lines[i] += String.fromCharCode(0x3000);
+                }
+                lines[i] += text[i];
+            }
             break;
         case 'triangle': 
             for (var i = 0; i < text.length; i++) {
